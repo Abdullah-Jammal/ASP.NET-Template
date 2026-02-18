@@ -1,27 +1,40 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Template.Infrastructure.Identity;
+using Template.Api.Common.Middleware;
+using Template.Application.Features.Auth.Login;
+using Template.Application.Features.Auth.Logout;
+using Template.Application.Features.Auth.Register.Commands;
 
-namespace Template.Api.Controllers.auth;
+namespace Template.Api.Controllers.Auth;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(UserManager<ApplicationUser> userManager) : ControllerBase
+[ApiExplorerSettings(GroupName = "auth")]
+public class AuthController(ISender sender) : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<IActionResult> Register(string email, string password)
+    public async Task<IActionResult> Register(RegisterCommand command)
     {
-        var user = new ApplicationUser
-        {
-            UserName = email,
-            Email = email
-        };
+        var result = await sender.Send(command);
+        return result.ToActionResult(this);
+    }
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginCommand command)
+    {
+        var result = await sender.Send(command);
+        return result.ToActionResult(this);
+    }
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken(RefreshTokenCommand command)
+    {
+        var result = await sender.Send(command);
+        return result.ToActionResult(this);
+    }
 
-        var result = await userManager.CreateAsync(user, password);
-
-        if (!result.Succeeded)
-            return BadRequest(result.Errors);
-
-        return Ok("User created");
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout(LogoutCommand command)
+    {
+        var result = await sender.Send(command);
+        return result.ToActionResult(this);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Template.Infrastructure.Identity;
+using Template.Infrastructure.Identity.Entity;
 
 namespace Template.Infrastructure.Configurations.Auth;
 

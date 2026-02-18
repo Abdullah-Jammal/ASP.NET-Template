@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Template.Infrastructure.Identity;
+using Template.Infrastructure.Identity.Entity;
 using Template.Infrastructure.Persistence;
 
 namespace Template.Infrastructure;
